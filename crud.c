@@ -91,18 +91,7 @@ createData(){
             strcpy(defaultStudent.situacao, "Aprovado");
 
         fwrite( &defaultStudent, sizeof(defaultStudent), 1, dataBase);
-        // //salvando tudo no arquivo finalmente
-        // fscanf(stdin, "%d", &defaultStudent.matricula);
-        // fscanf(stdin, "%s", &defaultStudent.nome);
-        // //salvando trabalhos e provas
-        // for(int i = 0; i<6;i++){
-        //     fscanf(stdin, "%lf", &defaultStudent.notas_de_prova[i]);
-        //     fscanf(stdin, "%lf", &defaultStudent.notas_de_listas[i]);
-        // }
-        // fscanf(stdin, "%lf", &defaultStudent.nota_de_trabalho);
-        // fscanf(stdin, "%lf", &defaultStudent.nota_final);
-        // fscanf(stdin, "%d", &defaultStudent.numero_ausencias);
-        // fscanf(stdin, "%s", &defaultStudent.situacao);
+         //salvando tudo no arquivo finalmente
     
     } while (defaultStudent.matricula!=0);
     fclose(dataBase);
