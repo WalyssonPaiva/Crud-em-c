@@ -1,2 +1,2 @@
-# Crud-em-c
-projeto final da disciplina de introdução a programação
+# Crud em C
+###Um programa capaz de criar, atualizar, ler e deletar cadastro de alunos usando arquivos e struct 
