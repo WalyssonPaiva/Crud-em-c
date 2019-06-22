@@ -17,9 +17,13 @@ main(){
     int choice;
     while(1){ //lista de opções do programa
         system("clear");
-        puts("1 - Cadastrar uma turma \n2 - Consultar um aluno");
-        puts("3 - Alterar dados de um aluno \n4 - Listar dados de uma turma");
-        puts("5 - Terminar a execução\n");
+        puts("||=============================||");
+        puts("||======Escolha uma opção======||");
+        puts("||=============================||");
+        puts("||1|| Cadastrar uma turma      || \n||2|| Consultar um aluno       ||");
+        puts("||3|| Alterar dados de um aluno|| \n||4|| Listar dados de uma turma||");
+        puts("||5|| Terminar a execução      ||");
+        puts("||=============================||");
         scanf("%d", &choice);
         if(choice == 1)
             createData();
@@ -41,7 +45,7 @@ readData(){
     char name[100];
     int matricula=1;
     while(matricula){ //é só para ja entrar aqui direto, e caso a matricula seja 0, sai na hr
-        puts("\nDigite o nome (com o diretório pfv) de um arquivo de turma: ");
+        puts("\nDigite o nome (ex: home/user/documents/nomeDoArquivo) de um arquivo de turma: ");
         scanf("%s", name);//digita certo pfv
         if(name[0]=='f' && name[1]=='i' && name[2]=='m'){ //se o usuário digitar "fim", voltamos para o menu principal
             break;
@@ -66,17 +70,31 @@ lendoArquivo(int matricula, char *FileName){
         dataBase = fopen( FileName, "rb");
         while (fread( &defaultStudent, sizeof(defaultStudent), 1, dataBase)){//vamos ler o arquivo XD
             if(defaultStudent.matricula == matricula){//se a matricula do arquivo for igual a digitada pelo usuário
-                printf( "\nMatrícula: %d\n", defaultStudent.matricula ); //preenchendo os dados na tela, todos bonitinhos
-                printf( "Nome: %s\n", defaultStudent.nome );
+                puts("||======================================");
+                puts("||======================================");
+                printf( "||Matrícula: %d                       \n", defaultStudent.matricula ); //preenchendo os dados na tela, todos bonitinhos
+                puts("||--------------------------------------");
+                printf( "||Nome: %s                            \n", defaultStudent.nome );
+                puts("||--------------------------------------");
                 for(int i = 0; i<6;i++){
-                    printf( "Nota da prova %d: %lf\n",i+1, defaultStudent.notas_de_prova[i]);
-                    printf( "Nota da lista %d: %lf\n",i+1, defaultStudent.notas_de_listas[i]);
+                    printf( "||Nota da prova %d: %lf           \n",i+1, defaultStudent.notas_de_prova[i]);
+                    puts("||--------------------------------------");
+                   
                 }
-                printf( "Nota do trabalho: %lf\n", defaultStudent.nota_de_trabalho);
-                printf( "Nota final: %lf\n", defaultStudent.nota_final);
-                printf( "Noumero de ausências: %d\n", defaultStudent.numero_ausencias);
-                printf( "Situacao: %s\n", defaultStudent.situacao);
-                printf( "\n" );
+                for(int i = 0; i<6;i++){
+                    printf( "||Nota da lista %d: %lf           \n",i+1, defaultStudent.notas_de_listas[i]);
+                    puts("||--------------------------------------");
+                }
+                printf( "||Nota do trabalho: %lf               \n", defaultStudent.nota_de_trabalho);
+                puts("||--------------------------------------");
+                printf( "||Nota final: %lf                     \n", defaultStudent.nota_final);
+                puts("||--------------------------------------");
+                printf( "||Noumero de ausências: %d            \n", defaultStudent.numero_ausencias);
+                puts("||--------------------------------------");
+                printf( "||Situacao: %s                        \n", defaultStudent.situacao);
+                puts("||======================================");
+                puts("||======================================");
+                printf( "\n\n" );
                 break;
             }
         }
