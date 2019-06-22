@@ -5,3 +5,4 @@
 ##### Execute o comando "gcc -o crud crud.c -lm" no seu terminal para compilar
 ##### Execute "./crud" para executar
 ## Exemplo:
+![](Example.gif)
