@@ -16,14 +16,15 @@ struct student{ //struct padrão de alunos
 main(){
     int choice;
     while(1){ //lista de opções do programa
+        system("clear");
         puts("1 - Cadastrar uma turma \n2 - Consultar um aluno");
         puts("3 - Alterar dados de um aluno \n4 - Listar dados de uma turma");
         puts("5 - Terminar a execução\n");
         scanf("%d", &choice);
         if(choice == 1)
             createData();
-        // else if(choice == 2)
-        //     readData();
+         else if(choice == 2)
+             readData();
         // else if(choice == 3)
         //     updateData();
         // else if(choice == 4)
@@ -33,6 +34,54 @@ main(){
         else //se for diferente das opções dadas
             puts("Opção inexistente");     
     }   
+}
+readData(){
+    system("clear");//limpando terminal
+    FILE * dataBase;
+    char name[100];
+    int matricula=1;
+    while(matricula){ //é só para ja entrar aqui direto, e caso a matricula seja 0, sai na hr
+        puts("\nDigite o nome (com o diretório pfv) de um arquivo de turma: ");
+        scanf("%s", name);//digita certo pfv
+        if(name[0]=='f' && name[1]=='i' && name[2]=='m'){ //se o usuário digitar "fim", voltamos para o menu principal
+            break;
+        }
+        char *FileName = name;
+        dataBase = fopen( FileName, "rb");//abrindo apenas em modo de leitura READ BINARY
+        if(!(dataBase==NULL)){//só entra aqui se o arquivo não estiver vazio, se estiver ele pede para digitar de novo
+            while(matricula){//vai ficar nesse loop enquanto a matrícula não for -
+                puts("\nDigite um número de matrícula: ");
+                scanf("%d",&matricula);
+                lendoArquivo(matricula, FileName);//achei melhor uma função para isso, se não ficaria desorganizado        
+            }
+        
+        }
+        fclose(dataBase);
+    }
+    
+}
+lendoArquivo(int matricula, char *FileName){
+    if(!(matricula == 0)){//se a matricula for 0, ele não faz nada
+        FILE * dataBase;
+        dataBase = fopen( FileName, "rb");
+        while (fread( &defaultStudent, sizeof(defaultStudent), 1, dataBase)){//vamos ler o arquivo XD
+            if(defaultStudent.matricula == matricula){//se a matricula do arquivo for igual a digitada pelo usuário
+                printf( "\nMatrícula: %d\n", defaultStudent.matricula ); //preenchendo os dados na tela, todos bonitinhos
+                printf( "Nome: %s\n", defaultStudent.nome );
+                for(int i = 0; i<6;i++){
+                    printf( "Nota da prova %d: %lf\n",i+1, defaultStudent.notas_de_prova[i]);
+                    printf( "Nota da lista %d: %lf\n",i+1, defaultStudent.notas_de_listas[i]);
+                }
+                printf( "Nota do trabalho: %lf\n", defaultStudent.nota_de_trabalho);
+                printf( "Nota final: %lf\n", defaultStudent.nota_final);
+                printf( "Noumero de ausências: %d\n", defaultStudent.numero_ausencias);
+                printf( "Situacao: %s\n", defaultStudent.situacao);
+                printf( "\n" );
+                break;
+            }
+        }
+    fclose(dataBase);
+    }                       
 }
 createData(){
     char name[100], directory[100];
@@ -57,22 +106,24 @@ createData(){
         if(defaultStudent.matricula == 0)
             break;
 
-        puts("\ndigite o nome: ");
-        scanf("%s", defaultStudent.nome);
+        puts("digite o nome: ");
+        getchar();//o puts tem o /n por padrão, esse getchar serve para q o scanf nao confunda esse /n com entrada do teclado
+        scanf("%[^\n]", defaultStudent.nome);//esse código [^\n] serve para ler toda a linha que o usuário digitar
+        getchar();
         //o laço abaixo serve para preenchermos o vetor de notas de prova
         for(int i =0; i<6;i++){
-            printf("\ndigite a nota de prova número %d: ", i+1);
+            printf("digite a nota de prova número %d: ", i+1);
             scanf("%lf", &defaultStudent.notas_de_prova[i]);
         }
         //o laço abaixo serve para preenchermos o vetor de notas de listas
         for(int i =0; i<6;i++){
-            printf("\ndigite a nota de lista número %d: ", i+1);
+            printf("digite a nota de lista número %d: ", i+1);
             scanf("%lf", &defaultStudent.notas_de_listas[i]);
         }
-        puts("\ndigite a nota do trabalho: ");
+        puts("digite a nota do trabalho: ");
         scanf("%lf", &defaultStudent.nota_de_trabalho);
 
-        puts("\ndigite o número de ausências: ");
+        puts("digite o número de ausências: ");
         scanf("%d", &defaultStudent.numero_ausencias);
         
         //setando ponteiros para jogar os vetores em outra função
