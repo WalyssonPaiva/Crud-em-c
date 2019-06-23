@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 struct student{ //struct padrão de alunos
     int matricula;
     char nome[100];
@@ -17,6 +18,11 @@ main(){
     int choice;
     while(1){ //lista de opções do programa
         system("clear");
+        puts("      (\"`-''-/\").___..--''\"`-._");
+        puts("       `6_ 6  )   `-.  (     ).`-.__.`)");
+        puts("       (_Y_.)'  ._   )  `._ `. ``-..-'");
+        puts("      ..`--'_..-_/  /--'_.' ,'");
+        puts("      (il),-''  (li),'  ((!.-'");
         puts("||=============================||");
         puts("||======Escolha uma opção======||");
         puts("||=============================||");
@@ -28,35 +34,76 @@ main(){
         if(choice == 1)
             createData();
          else if(choice == 2)
-             readData();
-        // else if(choice == 3)
-        //     updateData();
-        // else if(choice == 4)
-        //     listData();
+             readData(1);
+         else if(choice == 3)
+            readData(0);
+         else if(choice == 4)
+             listData();
         else if(choice == 5)
             break; //sai do while
         else //se for diferente das opções dadas
             puts("Opção inexistente");     
     }   
 }
-readData(){
+listData(){
+
+}
+updateData(int matricula, char *FileName){
+    system("clear");
+    if(!(matricula == 0)){//se a matricula for 0, ele não faz nada
+        FILE * dataBase;
+        dataBase = fopen( FileName, "r+b");//abre o arquivo em modo aleatório para podermos sobrescrever um registro
+        while (fread( &defaultStudent, sizeof(defaultStudent), 1, dataBase)){//vamos ler o arquivo XD
+            if(defaultStudent.matricula == matricula){//se a matricula do arquivo for igual a digitada pelo usuário
+                puts("||======================================");
+                puts("||======================================");
+                printf( "||Matrícula: %d                       \n", defaultStudent.matricula ); //preenchendo os dados na tela, todos bonitinhos
+                printf( "||Nome: %s                            \n", defaultStudent.nome );
+                for(int i = 0; i<6;i++){
+                    printf( "||Nota da prova %d: %lf           \n",i+1, defaultStudent.notas_de_prova[i]);       
+                }
+                for(int i = 0; i<6;i++){
+                    printf( "||Nota da lista %d: %lf           \n",i+1, defaultStudent.notas_de_listas[i]);
+                }
+                printf( "||Nota do trabalho: %lf               \n", defaultStudent.nota_de_trabalho);
+                printf( "||Nota final: %lf                     \n", defaultStudent.nota_final);
+                printf( "||Noumero de ausências: %d            \n", defaultStudent.numero_ausencias);
+                printf( "||Situacao: %s                        \n", defaultStudent.situacao);
+                puts("||======================================");
+                printf( "\n\n" );
+                puts("digite os novos dados do aluno");
+                
+            }
+            archiveData();
+            fseek(dataBase, (-1)*sizeof(defaultStudent), SEEK_CUR);//volta o "leitor do arquivo para a posição do registro a ser alterado"
+            fwrite( &defaultStudent, sizeof(defaultStudent), 1, dataBase);//finalmente altera o registro
+        }
+    fclose(dataBase);
+    }       
+   
+}
+readData(int choice){
     system("clear");//limpando terminal
     FILE * dataBase;
     char name[100];
-    int matricula=1;
-    while(matricula){ //é só para ja entrar aqui direto, e caso a matricula seja 0, sai na hr
+    int matricula;
+    while(1){ //é só para ja entrar aqui direto, e caso a matricula seja 0, sai na hr
         puts("\nDigite o nome (ex: home/user/documents/nomeDoArquivo) de um arquivo de turma: ");
         scanf("%s", name);//digita certo pfv
         if(name[0]=='f' && name[1]=='i' && name[2]=='m'){ //se o usuário digitar "fim", voltamos para o menu principal
             break;
         }
+        matricula = 1;
         char *FileName = name;
         dataBase = fopen( FileName, "rb");//abrindo apenas em modo de leitura READ BINARY
         if(!(dataBase==NULL)){//só entra aqui se o arquivo não estiver vazio, se estiver ele pede para digitar de novo
-            while(matricula){//vai ficar nesse loop enquanto a matrícula não for -
+            while(matricula){//vai ficar nesse loop enquanto a matrícula não for 0
                 puts("\nDigite um número de matrícula: ");
                 scanf("%d",&matricula);
-                lendoArquivo(matricula, FileName);//achei melhor uma função para isso, se não ficaria desorganizado        
+                if(choice)//se a requisição veio do Main, entra no método abaixo
+                    lendoArquivo(matricula, FileName);//achei melhor uma função para isso, se não ficaria desorganizado        
+                else
+                    updateData(matricula, FileName);
             }
         
         }
@@ -123,8 +170,22 @@ createData(){
         scanf("%d", &defaultStudent.matricula);
         if(defaultStudent.matricula == 0)
             break;
-
-        puts("digite o nome: ");
+        archiveData();//função para receber os valores do usuário
+        fwrite( &defaultStudent, sizeof(defaultStudent), 1, dataBase);
+         //salvando tudo no arquivo finalmente
+    
+    } while (defaultStudent.matricula!=0);
+    fclose(dataBase);
+    // puts("Conteúdo atual do arquivo");
+    //  dataBase = fopen( file, "rb");
+    //         fread( &defaultStudent, sizeof(defaultStudent), 1, dataBase);
+    //         printf( "Nome     : %s\n", defaultStudent.nome );
+    //         printf( "situacao    : %s\n", defaultStudent.situacao);
+    //         printf( "\n" );
+    
+}
+archiveData(){
+ puts("digite o nome: ");
         getchar();//o puts tem o /n por padrão, esse getchar serve para q o scanf nao confunda esse /n com entrada do teclado
         scanf("%[^\n]", defaultStudent.nome);//esse código [^\n] serve para ler toda a linha que o usuário digitar
         getchar();
@@ -143,7 +204,6 @@ createData(){
 
         puts("digite o número de ausências: ");
         scanf("%d", &defaultStudent.numero_ausencias);
-        
         //setando ponteiros para jogar os vetores em outra função
         double *notasProvas = defaultStudent.notas_de_prova, *notasListas = defaultStudent.notas_de_listas;
         defaultStudent.nota_final = finalMedia(notasProvas,notasListas, defaultStudent.nota_de_trabalho);
@@ -158,19 +218,6 @@ createData(){
             strcpy(defaultStudent.situacao, "Reprovado por nota");
         else if(situation == 3)
             strcpy(defaultStudent.situacao, "Aprovado");
-
-        fwrite( &defaultStudent, sizeof(defaultStudent), 1, dataBase);
-         //salvando tudo no arquivo finalmente
-    
-    } while (defaultStudent.matricula!=0);
-    fclose(dataBase);
-    // puts("Conteúdo atual do arquivo");
-    //  dataBase = fopen( file, "rb");
-    //         fread( &defaultStudent, sizeof(defaultStudent), 1, dataBase);
-    //         printf( "Nome     : %s\n", defaultStudent.nome );
-    //         printf( "situacao    : %s\n", defaultStudent.situacao);
-    //         printf( "\n" );
-    
 }
 checkSituation(double notaFinal, int faltas){
     int s;
