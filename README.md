@@ -1,8 +1,9 @@
 # Crud em C
 ### Um programa capaz de criar, atualizar, ler e deletar cadastro de alunos usando arquivos e struct 
-#### Função 1,2,3 e 5 ok. Função 4 funcionando apenas o 4.1
+#### Função 1,2,3 e 5 ok. Função 4 funcionando perfeitamente, falta organizar o código
 #### Corrigido erro em que 3 listava após a alteração
 #### Corrigido erro em que 4 duplicava o ultimo registo
+#### Corrigido erro em que 4 ordennava somente se a primeira letra fosse maior
 # Para executar:
 ##### Execute o comando "gcc -o crud crud.c -lm" no seu terminal para compilar
 ##### Execute "./crud" para executar
