@@ -46,8 +46,134 @@ main(){
     }   
 }
 listData(){
-
+    system("clear");
+    FILE * dataBase;
+    char name[200];
+    int op = 0;
+    while(op!=5){
+        puts("\nDigite o nome (ex: home/user/documents/nomeDoArquivo) de um arquivo de turma: ");
+        scanf("%s", name);//digita certo pfv
+        if(name[0]=='f' && name[1]=='i' && name[2]=='m'){ //se o usuário digitar "fim", voltamos para o menu principal
+            break;
+        }
+        op = 0;
+        char *FileName = name;
+        int contador = verificarTamanho(FileName);
+        dataBase = fopen( FileName, "rb");  
+        struct student estudantes[contador];
+        int final = contador;
+        contador = 0;
+        while(feof(dataBase)==0){
+            fread( &defaultStudent, sizeof(defaultStudent), 1, dataBase);
+             if(contador!=final-1){
+                estudantes[contador].matricula= defaultStudent.matricula;
+                strcpy(estudantes[contador].nome, defaultStudent.nome );
+                strcpy(estudantes[contador].situacao, defaultStudent.situacao );
+                estudantes[contador].nota_de_trabalho = defaultStudent.nota_de_trabalho;
+                estudantes[contador].nota_final = defaultStudent.nota_final;
+                estudantes[contador].numero_ausencias = defaultStudent.numero_ausencias;
+                for(int i = 0; i<6;i++){
+                    estudantes[contador].notas_de_prova[i] = defaultStudent.notas_de_prova[i];
+                    estudantes[contador].notas_de_listas[i] = defaultStudent.notas_de_listas[i]; 
+                }
+                contador++;
+             }
+        }
+        //for(int i = 0; i<contador-1;i++){
+            //printf("%s\n", estudantes[i].nome);
+            //printf("se ta vazio deu erro");
+        //}
+        int matricula, ausencias;
+        char nome[100], situacao[50];
+        double notasProva[6], notasListas[6], notaTrabalho, notaFinal;
+        //system("clear");
+        while(op!=4 && op!=5){
+            puts("1 - listar alunos por ordem crescente de matrícula");
+            puts("2 - listar alunos por ordem alfabética");
+            puts("3 - listar alunos por ordem crescente de nota final");
+            puts("4 - terminar e voltar para processar nova turma");
+            puts("5 - terminar execução do módulo");
+            puts("===========================================");
+            scanf("%d", &op);
+            system("clear");
+            if(op == 1){
+                for(int i = 0; i<contador-1;i++){
+                    if(estudantes[i].matricula > estudantes[i+1].matricula){
+                        //definindo valores de variáveis auxiliares
+                        matricula = estudantes[i].matricula;
+                        strcpy(nome, estudantes[i].nome);
+                        strcpy(situacao, estudantes[i].situacao );
+                        notaTrabalho= estudantes[i].nota_de_trabalho;
+                        notaFinal = estudantes[i].nota_final;
+                        ausencias = estudantes[i].numero_ausencias;
+                        for(int j = 0; j<6;j++){
+                            notasProva[j] = estudantes[i].notas_de_prova[j];
+                            notasListas[j] = estudantes[i].notas_de_listas[j]; 
+                        }
+                        //beleza, agr vamos fazer a inversão de ordem
+                        estudantes[i].matricula = estudantes[i+1].matricula;
+                        strcpy(estudantes[i].nome, estudantes[i+1].nome);
+                        strcpy(estudantes[i].situacao, estudantes[i+1].situacao );
+                        estudantes[i].nota_de_trabalho = estudantes[i+1].nota_de_trabalho;
+                        estudantes[i].nota_final = estudantes[i+1].nota_final;
+                        estudantes[i].numero_ausencias = estudantes[i+1].numero_ausencias;
+                        for(int j = 0; j<6;j++){
+                            estudantes[i].notas_de_prova[j] = estudantes[i+1].notas_de_prova[j];
+                            estudantes[i].notas_de_listas[j] = estudantes[i+1].notas_de_listas[j]; 
+                        }
+                        //agr o i+1 vai receber os valores das variáveis auxliares
+                        estudantes[i+1].matricula = matricula;
+                        strcpy(estudantes[i+1].nome, nome);
+                        strcpy(estudantes[i+1].situacao, situacao );
+                        estudantes[i+1].nota_de_trabalho = notaTrabalho;
+                        estudantes[i+1].nota_final = notaFinal;
+                        estudantes[i+1].numero_ausencias =  ausencias;
+                        for(int j = 0; j<6;j++){
+                            estudantes[i+1].notas_de_prova[j] = notasProva[j];
+                            estudantes[i+1].notas_de_listas[j] = notasListas[j]; 
+                        }
+                            i= -1;
+                    }
+                }
+                //finalmente vamos printar na tela
+                for(int i = 0; i<contador;i++){
+                puts("||======================================");
+                puts("||======================================");
+                printf( "||Matrícula: %d                       \n", estudantes[i].matricula ); //preenchendo os dados na tela, todos bonitinhos
+                printf( "||Nome: %s                            \n", estudantes[i].nome );
+                for(int j = 0; j<6;j++){
+                    printf( "||Nota da prova %d: %lf           \n",i+1, estudantes[i].notas_de_prova[j]);       
+                }
+                for(int j = 0; j<6;j++){
+                    printf( "||Nota da lista %d: %lf           \n",i+1, estudantes[i].notas_de_listas[j]);
+                }
+                printf( "||Nota do trabalho: %lf               \n", estudantes[i].nota_de_trabalho);
+                printf( "||Nota final: %lf                     \n", estudantes[i].nota_final);
+                printf( "||Noumero de ausências: %d            \n", estudantes[i].numero_ausencias);
+                printf( "||Situacao: %s                        \n", estudantes[i].situacao);
+                puts("||======================================");
+                printf( "\n\n" );
+                }
+            }
+                
+        }
+        printf("%d",contador);
+        
+    //fclose(dataBase);
+    }
 }
+verificarTamanho(char *FileName){
+    FILE * dataBase;
+    int contador = 0;
+    dataBase = fopen( FileName, "rb");
+        while(feof(dataBase)==0){
+            fread( &defaultStudent, sizeof(defaultStudent), 1, dataBase);
+            contador++;
+        }
+    fclose(dataBase);
+    return contador;
+}               
+
 updateData(int matricula, char *FileName){
     system("clear");
     if(!(matricula == 0)){//se a matricula for 0, ele não faz nada
@@ -71,12 +197,12 @@ updateData(int matricula, char *FileName){
                 printf( "||Situacao: %s                        \n", defaultStudent.situacao);
                 puts("||======================================");
                 printf( "\n\n" );
-                puts("digite os novos dados do aluno");
-                
+                puts("digite os novos dados do aluno:");
+                archiveData();
+                fseek(dataBase, (-1)*sizeof(defaultStudent), SEEK_CUR);//volta o "leitor do arquivo para a posição do registro a ser alterado"
+                fwrite( &defaultStudent, sizeof(defaultStudent), 1, dataBase);//finalmente altera o registro 
             }
-            archiveData();
-            fseek(dataBase, (-1)*sizeof(defaultStudent), SEEK_CUR);//volta o "leitor do arquivo para a posição do registro a ser alterado"
-            fwrite( &defaultStudent, sizeof(defaultStudent), 1, dataBase);//finalmente altera o registro
+            
         }
     fclose(dataBase);
     }       
@@ -85,7 +211,7 @@ updateData(int matricula, char *FileName){
 readData(int choice){
     system("clear");//limpando terminal
     FILE * dataBase;
-    char name[100];
+    char name[200];
     int matricula;
     while(1){ //é só para ja entrar aqui direto, e caso a matricula seja 0, sai na hr
         puts("\nDigite o nome (ex: home/user/documents/nomeDoArquivo) de um arquivo de turma: ");
