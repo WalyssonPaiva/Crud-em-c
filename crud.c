@@ -96,7 +96,7 @@ listData(){
             puts("===========================================");
             scanf("%d", &op);
             system("clear");
-            if(op == 1){
+            if(op == 1){//o código aqui está muito repetitivo, vou arrumar só quando tiver tempo, boa sorte pra quem quiser entender
                 for(int i = 0; i<contador-1;i++){
                     if(estudantes[i].matricula > estudantes[i+1].matricula){
                         //definindo valores de variáveis auxiliares
@@ -154,11 +154,125 @@ listData(){
                 puts("||======================================");
                 printf( "\n\n" );
                 }
+            }else if(op ==2){
+                for(int i = 0; i<contador-1;i++){
+                    if(strcmp(estudantes[i].nome, estudantes[i+1].nome) > 0){
+                        //definindo valores de variáveis auxiliares
+                        matricula = estudantes[i].matricula;
+                        strcpy(nome, estudantes[i].nome);
+                        strcpy(situacao, estudantes[i].situacao );
+                        notaTrabalho= estudantes[i].nota_de_trabalho;
+                        notaFinal = estudantes[i].nota_final;
+                        ausencias = estudantes[i].numero_ausencias;
+                        for(int j = 0; j<6;j++){
+                            notasProva[j] = estudantes[i].notas_de_prova[j];
+                            notasListas[j] = estudantes[i].notas_de_listas[j]; 
+                        }
+                        //beleza, agr vamos fazer a inversão de ordem
+                        estudantes[i].matricula = estudantes[i+1].matricula;
+                        strcpy(estudantes[i].nome, estudantes[i+1].nome);
+                        strcpy(estudantes[i].situacao, estudantes[i+1].situacao );
+                        estudantes[i].nota_de_trabalho = estudantes[i+1].nota_de_trabalho;
+                        estudantes[i].nota_final = estudantes[i+1].nota_final;
+                        estudantes[i].numero_ausencias = estudantes[i+1].numero_ausencias;
+                        for(int j = 0; j<6;j++){
+                            estudantes[i].notas_de_prova[j] = estudantes[i+1].notas_de_prova[j];
+                            estudantes[i].notas_de_listas[j] = estudantes[i+1].notas_de_listas[j]; 
+                        }
+                        //agr o i+1 vai receber os valores das variáveis auxliares
+                        estudantes[i+1].matricula = matricula;
+                        strcpy(estudantes[i+1].nome, nome);
+                        strcpy(estudantes[i+1].situacao, situacao );
+                        estudantes[i+1].nota_de_trabalho = notaTrabalho;
+                        estudantes[i+1].nota_final = notaFinal;
+                        estudantes[i+1].numero_ausencias =  ausencias;
+                        for(int j = 0; j<6;j++){
+                            estudantes[i+1].notas_de_prova[j] = notasProva[j];
+                            estudantes[i+1].notas_de_listas[j] = notasListas[j]; 
+                        }
+                            i= -1;
+                    }
+                }
+                //finalmente vamos printar na tela
+                for(int i = 0; i<contador;i++){
+                puts("||======================================");
+                puts("||======================================");
+                printf( "||Matrícula: %d                       \n", estudantes[i].matricula ); //preenchendo os dados na tela, todos bonitinhos
+                printf( "||Nome: %s                            \n", estudantes[i].nome );
+                for(int j = 0; j<6;j++){
+                    printf( "||Nota da prova %d: %lf           \n",i+1, estudantes[i].notas_de_prova[j]);       
+                }
+                for(int j = 0; j<6;j++){
+                    printf( "||Nota da lista %d: %lf           \n",i+1, estudantes[i].notas_de_listas[j]);
+                }
+                printf( "||Nota do trabalho: %lf               \n", estudantes[i].nota_de_trabalho);
+                printf( "||Nota final: %lf                     \n", estudantes[i].nota_final);
+                printf( "||Noumero de ausências: %d            \n", estudantes[i].numero_ausencias);
+                printf( "||Situacao: %s                        \n", estudantes[i].situacao);
+                puts("||======================================");
+                printf( "\n\n" );
+                }
+            }else if(op ==3){
+                for(int i = 0; i<contador-1;i++){
+                    if(estudantes[i].nota_final < estudantes[i+1].nota_final){
+                        //definindo valores de variáveis auxiliares
+                        matricula = estudantes[i].matricula;
+                        strcpy(nome, estudantes[i].nome);
+                        strcpy(situacao, estudantes[i].situacao );
+                        notaTrabalho= estudantes[i].nota_de_trabalho;
+                        notaFinal = estudantes[i].nota_final;
+                        ausencias = estudantes[i].numero_ausencias;
+                        for(int j = 0; j<6;j++){
+                            notasProva[j] = estudantes[i].notas_de_prova[j];
+                            notasListas[j] = estudantes[i].notas_de_listas[j]; 
+                        }
+                        //beleza, agr vamos fazer a inversão de ordem
+                        estudantes[i].matricula = estudantes[i+1].matricula;
+                        strcpy(estudantes[i].nome, estudantes[i+1].nome);
+                        strcpy(estudantes[i].situacao, estudantes[i+1].situacao );
+                        estudantes[i].nota_de_trabalho = estudantes[i+1].nota_de_trabalho;
+                        estudantes[i].nota_final = estudantes[i+1].nota_final;
+                        estudantes[i].numero_ausencias = estudantes[i+1].numero_ausencias;
+                        for(int j = 0; j<6;j++){
+                            estudantes[i].notas_de_prova[j] = estudantes[i+1].notas_de_prova[j];
+                            estudantes[i].notas_de_listas[j] = estudantes[i+1].notas_de_listas[j]; 
+                        }
+                        //agr o i+1 vai receber os valores das variáveis auxliares
+                        estudantes[i+1].matricula = matricula;
+                        strcpy(estudantes[i+1].nome, nome);
+                        strcpy(estudantes[i+1].situacao, situacao );
+                        estudantes[i+1].nota_de_trabalho = notaTrabalho;
+                        estudantes[i+1].nota_final = notaFinal;
+                        estudantes[i+1].numero_ausencias =  ausencias;
+                        for(int j = 0; j<6;j++){
+                            estudantes[i+1].notas_de_prova[j] = notasProva[j];
+                            estudantes[i+1].notas_de_listas[j] = notasListas[j]; 
+                        }
+                            i= -1;
+                    }
+                }
+                //finalmente vamos printar na tela
+                for(int i = 0; i<contador;i++){
+                puts("||======================================");
+                puts("||======================================");
+                printf( "||Matrícula: %d                       \n", estudantes[i].matricula ); //preenchendo os dados na tela, todos bonitinhos
+                printf( "||Nome: %s                            \n", estudantes[i].nome );
+                for(int j = 0; j<6;j++){
+                    printf( "||Nota da prova %d: %lf           \n",i+1, estudantes[i].notas_de_prova[j]);       
+                }
+                for(int j = 0; j<6;j++){
+                    printf( "||Nota da lista %d: %lf           \n",i+1, estudantes[i].notas_de_listas[j]);
+                }
+                printf( "||Nota do trabalho: %lf               \n", estudantes[i].nota_de_trabalho);
+                printf( "||Nota final: %lf                     \n", estudantes[i].nota_final);
+                printf( "||Noumero de ausências: %d            \n", estudantes[i].numero_ausencias);
+                printf( "||Situacao: %s                        \n", estudantes[i].situacao);
+                puts("||======================================");
+                printf( "\n\n" );
+                }
             }
                 
-        }
-        printf("%d",contador);
-        
+        }      
     //fclose(dataBase);
     }
 }
